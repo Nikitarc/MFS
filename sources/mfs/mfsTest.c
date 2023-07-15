@@ -3,7 +3,7 @@
 	
 	Alain Chebrou
 
-	mfsTest.c	Some examples using MFS
+	mfsTest.c	An example using MFS on microcontroller
 
 	When		Who	What
 	05/31/23	ac	Creation
@@ -31,12 +31,13 @@ static	int mfsDevRead (void * userData, uint32_t address, void * pBuffer, uint32
 static	void mfsDevLock (void * userData)
 {
 	(void) userData ;
-	W25Q_SpiGet () ;
+	W25Q_SpiTake () ;
 }
 
 static	void mfsDevUnlock (void * userData)
 {
 	(void) userData ;
+	W25Q_SpiGive () ;
 }
 
 //--------------------------------------------------------------------------------

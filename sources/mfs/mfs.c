@@ -7,6 +7,7 @@
 
 	When		Who	What
 	05/22/23	ac	Creation
+	04/06/23	ac	Always use absolute path, but the 1st '/' is optional
 
 ----------------------------------------------------------------------
 */
@@ -104,7 +105,7 @@ static	mfsError_t	searchDir (mfsCtx_t * pCtx, mfsDirHdr_t * address, const char 
 }
 
 //--------------------------------------------------------------------------------
-//	Traverse the path for an absolute path (beginning with '/')
+//	Traverse the path for an absolute path (beginning with '/' or not)
 //	On return the scratchpad contain the fileEntry of the last name
 
 static	mfsError_t	searchPath (mfsCtx_t * pCtx, mfsDirHdr_t * address, const char * path)
@@ -114,14 +115,9 @@ static	mfsError_t	searchPath (mfsCtx_t * pCtx, mfsDirHdr_t * address, const char
 	mfsDirHdr_t		* pDirBlock ;
 	size_t			length ;
 
-	if (* path != '/')
-	{
-		return MFS_EINVAL ;		// Not an absolute path
-	}
-
 	if (path [1] == 0)
 	{
-		// Speciel case: the path is the root dir
+		// Special case: the path is the root dir
 		// There is no entry for the root dir (don't have a parent), so build one
 		scratchpad.fileEntry.blockNum  = 1 ;
 		scratchpad.fileEntry.flags     = MFS_DIR ;
@@ -129,15 +125,18 @@ static	mfsError_t	searchPath (mfsCtx_t * pCtx, mfsDirHdr_t * address, const char
 		scratchpad.fileEntry.entrySize = sizeof (mfsEntryHdr_t) + 2 ;
 		scratchpad.fileEntry.name [0]  = '/' ;
 		scratchpad.fileEntry.name [1]  = 0 ;
-		return MFS_ENONE ;
+		return MFS_ENONE ;	// Found
 	}
 
 	pName = path ;
 	pDirBlock = address ;
 	while (1)
 	{
+		if (* pName == '/')
+		{
+			pName++ ;	// Skip the begining '/'
+		}
 		// Extract the name
-		pName++ ;	// skip '/'
 		length = strcspn (pName, "/") ;
 		memcpy (nameScratchpad, pName, length) ;
 		nameScratchpad [length] = 0 ;
