@@ -11,8 +11,7 @@ After some research I decided to write my own minimalist file system to meet my 
 ## How to use the MFS
 - Build the `mfsBuid` and `mfsExtract` utilities on your favourite Windows or Linux (non tested) PC.
 - Gather the files for your file system in a folder, you can use sub folders.
-- Use the `mfsBuid` utility to build the file containing the MFS
-syntax:
+- Use the `mfsBuid` utility to build the file containing the MFS file system
 - The mfsExtract utility makes it possible to extract the contents of an MFS and to reconstruct its tree structure on the PC. Then it is possible to compare the original tree structure used to build the MFS and the tree structure extracted from the MFS. If all went well, the directories and files are identical.
 
 
